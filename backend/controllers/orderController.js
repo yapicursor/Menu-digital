@@ -282,32 +282,18 @@ const createOrder = async (req, res) => {
         const [orderRows] = await pool.query('SELECT * FROM orders WHERE id = ?', [orderId]);
         const [itemRows] = await pool.query('SELECT * FROM order_items WHERE order_id = ?', [orderId]);
 
-        // Fire-and-forget emails (do not block the API response)
-        try {
-            const [rRows] = await pool.query('SELECT name, email FROM restaurants WHERE id = ?', [rid]);
-            const r = rRows && rRows[0];
-            await notifyRestaurantNewOrder({
-                restaurantEmail: r?.email,
-                restaurantName: r?.name,
-                order: orderRows[0],
-                items: itemRows,
-            });
-        } catch (e) {
-            console.error('Restaurant notification email skipped:', e);
-        }
-
-        // Email de confirmation au client
-        try {
-            await notifyCustomerOrderConfirmation({
-                customerEmail: orderRows[0]?.customer_email,
-                order: orderRows[0],
-                items: itemRows,
-            });
-        } catch (e) {
-            console.error('Customer confirmation email skipped:', e);
-        }
-
+        // Répondre immédiatement au client
         res.status(201).json({ ...orderRows[0], items: itemRows });
+
+        // Envoyer les mails en arrière-plan (sans bloquer)
+        pool.query('SELECT name, email FROM restaurants WHERE id = ?', [rid]).then(([rRows]) => {
+            const r = rRows && rRows[0];
+            notifyRestaurantNewOrder({ restaurantEmail: r?.email, restaurantName: r?.name, order: orderRows[0], items: itemRows })
+                .catch((e) => console.error('Restaurant notification email skipped:', e));
+        }).catch((e) => console.error('Restaurant query failed:', e));
+
+        notifyCustomerOrderConfirmation({ customerEmail: orderRows[0]?.customer_email, order: orderRows[0], items: itemRows })
+            .catch((e) => console.error('Customer confirmation email skipped:', e));
     } catch (err) {
         try {
             if (conn) await conn.rollback();
