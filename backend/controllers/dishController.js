@@ -44,7 +44,7 @@ const createDish = async (req, res) => {
     try {
         const [result] = await pool.query(
             'INSERT INTO dishes (name, description, price, image, available, category_id, restaurant_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [name, description || null, price, image, available !== undefined ? available : 1, category_id || null, req.restaurant.id]
+            [name, description || null, price, image, available !== undefined ? (available === 'true' || available === true ? 1 : 0) : 1, category_id || null, req.restaurant.id]
         );
         const [rows] = await pool.query('SELECT d.*, c.name AS category_name FROM dishes d LEFT JOIN categories c ON d.category_id = c.id WHERE d.id = ?', [result.insertId]);
         res.status(201).json(rows[0]);
@@ -71,7 +71,7 @@ const updateDish = async (req, res) => {
 
         await pool.query(
             'UPDATE dishes SET name=?, description=?, price=?, image=?, available=?, category_id=? WHERE id=? AND restaurant_id=?',
-            [name || existing[0].name, description ?? existing[0].description, price || existing[0].price, image, available !== undefined ? available : existing[0].available, category_id ?? existing[0].category_id, req.params.id, req.restaurant.id]
+            [name || existing[0].name, description ?? existing[0].description, price || existing[0].price, image, available !== undefined ? (available === 'true' || available === true ? 1 : 0) : existing[0].available, category_id ?? existing[0].category_id, req.params.id, req.restaurant.id]
         );
         const [rows] = await pool.query('SELECT d.*, c.name AS category_name FROM dishes d LEFT JOIN categories c ON d.category_id = c.id WHERE d.id = ?', [req.params.id]);
         res.json(rows[0]);
