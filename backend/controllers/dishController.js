@@ -41,10 +41,11 @@ const createDish = async (req, res) => {
     const { name, description, price, category_id, available } = req.body;
     if (!name || !price) return res.status(400).json({ message: 'Nom et prix requis' });
     const image = req.file ? `/uploads/${req.file.filename}` : null;
+    const availableInt = available === 'false' || available === false || available === '0' || available === 0 ? 0 : 1;
     try {
         const [result] = await pool.query(
             'INSERT INTO dishes (name, description, price, image, available, category_id, restaurant_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [name, description || null, price, image, available !== undefined ? (available === 'true' || available === true ? 1 : 0) : 1, category_id || null, req.restaurant.id]
+            [name, description || null, price, image, availableInt, category_id || null, req.restaurant.id]
         );
         const [rows] = await pool.query('SELECT d.*, c.name AS category_name FROM dishes d LEFT JOIN categories c ON d.category_id = c.id WHERE d.id = ?', [result.insertId]);
         res.status(201).json(rows[0]);
@@ -58,20 +59,11 @@ const updateDish = async (req, res) => {
         const [existing] = await pool.query('SELECT * FROM dishes WHERE id = ? AND restaurant_id = ?', [req.params.id, req.restaurant.id]);
         if (existing.length === 0) return res.status(404).json({ message: 'Plat introuvable' });
 
-        let image = existing[0].image;
-        if (req.file) {
-            // Delete old image
-            if (image) {
-                const rel = image.startsWith('/') ? image.slice(1) : image;
-                const oldPath = path.join(__dirname, '..', rel);
-                if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
-            }
-            image = `/uploads/${req.file.filename}`;
-        }
-
+        const image2 = req.file ? `/uploads/${req.file.filename}` : existing[0].image;
+        const availableInt2 = available === undefined ? existing[0].available : (available === 'false' || available === false || available === '0' || available === 0 ? 0 : 1);
         await pool.query(
             'UPDATE dishes SET name=?, description=?, price=?, image=?, available=?, category_id=? WHERE id=? AND restaurant_id=?',
-            [name || existing[0].name, description ?? existing[0].description, price || existing[0].price, image, available !== undefined ? (available === 'true' || available === true ? 1 : 0) : existing[0].available, category_id ?? existing[0].category_id, req.params.id, req.restaurant.id]
+            [name || existing[0].name, description ?? existing[0].description, price || existing[0].price, image2, availableInt2, category_id ?? existing[0].category_id, req.params.id, req.restaurant.id]
         );
         const [rows] = await pool.query('SELECT d.*, c.name AS category_name FROM dishes d LEFT JOIN categories c ON d.category_id = c.id WHERE d.id = ?', [req.params.id]);
         res.json(rows[0]);
