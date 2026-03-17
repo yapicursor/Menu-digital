@@ -1,6 +1,6 @@
 [build]
   base = "frontend"
-  command = "npm install && npm run build"
+  command = "npm i -g npm@latest && npm install && npm run build""
   publish = "dist"
 
 [[redirects]]
