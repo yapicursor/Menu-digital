@@ -21,13 +21,13 @@ function StatCard({ icon: Icon, label, value, color, suffix = '', trend }) {
             <div style={{ position: 'absolute', top: -20, right: -20, width: 100, height: 100, borderRadius: '50%', background: `${color}18`, filter: 'blur(20px)', pointerEvents: 'none' }} />
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                 <div>
-                    <p style={{ fontSize: '0.78rem', color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600, marginBottom: 10 }}>{label}</p>
-                    <p style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '2rem', color: 'var(--color-text)', lineHeight: 1 }}>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600, marginBottom: 10, display: 'block' }}>{label}</span>
+                    <div style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '2rem', color: 'var(--color-text)', lineHeight: 1 }}>
+                        {value}<span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-muted)', marginLeft: 4 }}>{suffix}</span>
+                    </div>
                     <div style={{ marginTop: 12 }}>
                         <TrendBadge value={trend} />
                     </div>
-                        {value}<span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-muted)', marginLeft: 4 }}>{suffix}</span>
-                    </p>
                 </div>
                 <div style={{ width: 48, height: 48, borderRadius: 12, background: `${color}20`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Icon size={22} color={color} />

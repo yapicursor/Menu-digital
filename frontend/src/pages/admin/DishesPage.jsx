@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { buildAssetUrl } from '../../services/api';
+
 
 const schema = z.object({
     name: z.string().min(1, 'Nom requis'),
@@ -31,7 +31,7 @@ function DishModal({ initial, categories, onClose, onSave, loading }) {
             available: initial?.available !== undefined ? Boolean(initial.available) : true,
         },
     });
-    const [preview, setPreview] = useState(initial?.image ? buildAssetUrl(initial.image) : null);
+    const [preview, setPreview] = useState(initial?.image ? initial.image : null);
     const [file, setFile] = useState(null);
     const available = watch('available');
 
@@ -230,7 +230,7 @@ export default function DishesPage() {
                                             style={{
                                                 width: '50%',
                                                 height: '100%',
-                                                backgroundImage: `url(${buildAssetUrl(dish.image)})`,
+                                                backgroundImage: `url(${dish.image})`,
                                                 backgroundSize: 'cover',
                                                 backgroundPosition: 'left center',
                                                 backgroundRepeat: 'no-repeat',
@@ -240,7 +240,7 @@ export default function DishesPage() {
                                             style={{
                                                 width: '50%',
                                                 height: '100%',
-                                                backgroundImage: `url(${buildAssetUrl(dish.image)})`,
+                                                backgroundImage: `url(${dish.image})`,
                                                 backgroundSize: 'cover',
                                                 backgroundPosition: 'right center',
                                                 backgroundRepeat: 'no-repeat',

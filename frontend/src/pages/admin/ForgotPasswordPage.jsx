@@ -40,7 +40,7 @@ export default function ForgotPasswordPage() {
                                     <Mail size={13} /> Email
                                 </label>
                                 <input className={`input ${errors.email ? 'input-error' : ''}`} type="email" placeholder="admin@restaurant.com" {...register('email')} />
-                                {errors.email && <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: 4 }}>{errors.email.message}</p>}
+                                {errors.email && <p style={{ color: '#cc2d2dff', fontSize: '0.75rem', marginTop: 4 }}>{errors.email.message}</p>}
                             </div>
 
                             {mutation.isError && (

@@ -10,7 +10,6 @@ import { useState } from 'react';
 
 const profileSchema = z.object({
     name: z.string().min(2, 'Nom requis'),
-    email: z.string().email('Email invalide'),
     phone: z.string().optional(),
     address: z.string().optional(),
 });
@@ -22,7 +21,7 @@ const passwordSchema = z.object({
 }).refine((d) => d.new_password === d.confirm_password, { message: 'Les mots de passe ne correspondent pas', path: ['confirm_password'] });
 
 export default function ProfilePage() {
-    const { restaurant, login, token } = useAuthStore();
+    const { restaurant, setSession, session } = useAuthStore();
     const queryClient = useQueryClient();
     const [showPwd, setShowPwd] = useState(false);
 
@@ -34,7 +33,7 @@ export default function ProfilePage() {
 
     const profileForm = useForm({
         resolver: zodResolver(profileSchema),
-        values: { name: profile?.name || '', email: profile?.email || '', phone: profile?.phone || '', address: profile?.address || '' },
+        values: { name: profile?.name || '', phone: profile?.phone || '', address: profile?.address || '' },
     });
 
     const passwordForm = useForm({ resolver: zodResolver(passwordSchema) });
@@ -42,7 +41,7 @@ export default function ProfilePage() {
     const profileMutation = useMutation({
         mutationFn: authService.updateProfile,
         onSuccess: (data) => {
-            login(token, data.restaurant);
+            setSession(session, data.restaurant);
             queryClient.invalidateQueries(['me']);
         },
     });
@@ -71,13 +70,6 @@ export default function ProfilePage() {
                             </label>
                             <input className={`input ${profileForm.formState.errors.name ? 'input-error' : ''}`} style={inputStyle} {...profileForm.register('name')} />
                             {profileForm.formState.errors.name && <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: 4 }}>{profileForm.formState.errors.name.message}</p>}
-                        </div>
-                        <div>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-muted)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                <Mail size={13} /> Email
-                            </label>
-                            <input className={`input ${profileForm.formState.errors.email ? 'input-error' : ''}`} style={inputStyle} type="email" {...profileForm.register('email')} />
-                            {profileForm.formState.errors.email && <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: 4 }}>{profileForm.formState.errors.email.message}</p>}
                         </div>
                         <div>
                             <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-muted)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>

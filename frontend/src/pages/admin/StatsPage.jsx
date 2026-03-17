@@ -213,8 +213,18 @@ export default function StatsPage() {
             }))
             .filter((x) => x.value > 0);
 
-        // Fallback to a single muted slice so the pie renders
-        return mapped.length > 0 ? mapped : [{ name: 'Aucune donnée', value: 1 }];
+        // Show all statuses with 0 if no data
+        if (mapped.length === 0) {
+            return [
+                { name: 'En attente', value: 0 },
+                { name: 'Acceptée', value: 0 },
+                { name: 'Refusée', value: 0 },
+                { name: 'En préparation', value: 0 },
+                { name: 'Terminée', value: 0 },
+            ];
+        }
+        
+        return mapped;
     }, [stats]);
 
     const topDishes = useMemo(() => {
@@ -225,7 +235,7 @@ export default function StatsPage() {
             revenue: Number(r.revenue) || 0,
         }));
 
-        // Fallback to render an empty bar chart
+        // Show empty bar chart if no data
         return mapped.length > 0 ? mapped : [{ name: 'Aucun plat', quantity: 0, revenue: 0 }];
     }, [stats]);
 
@@ -236,7 +246,7 @@ export default function StatsPage() {
             revenue: Number(r.revenue) || 0,
         }));
 
-        if (!rows.length) return [{ subject: 'Aucun plat', quantity: 0, revenue: 0 }];
+        if (!rows.length) return [{ name: 'Aucun plat', quantity: 0, revenue: 0 }];
 
         const maxQ = Math.max(...rows.map((r) => r.quantity), 1);
         const maxR = Math.max(...rows.map((r) => r.revenue), 1);
@@ -411,18 +421,12 @@ export default function StatsPage() {
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
-                    {stats?.topDishes?.length ? null : (
-                        <div style={{ marginTop: 10, fontSize: '0.85rem', color: 'var(--color-muted)' }}>
-                            Aucune donnée pour le moment.
-                        </div>
-                    )}
                 </Panel>
 
                 <Panel title="Profil des top plats" subtitle="Indice (0-100) : quantité vs CA" right={<TrendBadge value={stats?.revenueMoMPercent} />}>
                     <div style={{ height: 320 }}>
-                        {stats?.topDishes?.length ? (
-                            <ResponsiveContainer width="100%" height="100%">
-                                <RadarChart data={radarTopDishes} outerRadius="78%">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <RadarChart data={radarTopDishes} outerRadius="78%">
                                     <defs>
                                         <linearGradient id="radarOrange" x1="0" y1="0" x2="1" y2="1">
                                             <stop offset="0%" stopColor="#f97316" stopOpacity={0.55} />
@@ -442,9 +446,6 @@ export default function StatsPage() {
                                     <Radar name="CA" dataKey="revenue" stroke="#22c55e" fill="url(#radarGreen)" strokeWidth={2} isAnimationActive animationDuration={1050} />
                                 </RadarChart>
                             </ResponsiveContainer>
-                        ) : (
-                            <EmptyState title="Aucune donnée" subtitle="Ajoutez des commandes pour voir le profil." />
-                        )}
                     </div>
                 </Panel>
             </div>

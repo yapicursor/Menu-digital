@@ -52,17 +52,17 @@ export default function CategoriesPage() {
 
     const createMutation = useMutation({
         mutationFn: (data) => categoryService.create(data),
-        onSuccess: () => { qc.invalidateQueries(['categories']); setModal(null); },
+        onSuccess: () => { qc.invalidateQueries({ queryKey: ['categories'] }); setModal(null); },
     });
 
     const updateMutation = useMutation({
         mutationFn: ({ id, data }) => categoryService.update(id, data),
-        onSuccess: () => { qc.invalidateQueries(['categories']); setModal(null); },
+        onSuccess: () => { qc.invalidateQueries({ queryKey: ['categories'] }); setModal(null); },
     });
 
     const deleteMutation = useMutation({
         mutationFn: (id) => categoryService.delete(id),
-        onSuccess: () => qc.invalidateQueries(['categories']),
+        onSuccess: () => qc.invalidateQueries({ queryKey: ['categories'] }),
     });
 
     const handleSave = (data) => {

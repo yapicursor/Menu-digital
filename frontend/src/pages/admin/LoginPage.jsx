@@ -15,16 +15,20 @@ const schema = z.object({
 
 export default function LoginPage() {
     const navigate = useNavigate();
-    const login = useAuthStore((s) => s.login);
+    const login = useAuthStore((s) => s.setSession);
     const [showPwd, setShowPwd] = useState(false);
 
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(schema) });
 
     const mutation = useMutation({
         mutationFn: authService.login,
-        onSuccess: ({ token, restaurant }) => {
-            login(token, restaurant);
+        onSuccess: ({ session, restaurant }) => {
+            console.log('Login success:', session, restaurant);
+            login(session, restaurant);
             navigate('/admin/dashboard');
+        },
+        onError: (err) => {
+            console.error('Login error:', err);
         },
     });
 

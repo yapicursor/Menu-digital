@@ -1,8 +1,9 @@
 import { Plus, ShoppingCart } from 'lucide-react';
-import { buildAssetUrl } from '../../services/api';
 import useCartStore from '../../store/cartStore';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+const getImageUrl = (image) => image || null;
 
 export default function DishCard({ dish }) {
     const navigate = useNavigate();
@@ -28,7 +29,7 @@ export default function DishCard({ dish }) {
             onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') navigate(`/plat/${dish.id}`);
             }}
-            style={{ display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden', cursor: 'pointer' }}
+            style={{ display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden', cursor: 'pointer', height: '100%' }}
         >
             {/* Not available ribbon */}
             {!dish.available && (
@@ -54,7 +55,7 @@ export default function DishCard({ dish }) {
                             style={{
                                 width: '50%',
                                 height: '100%',
-                                backgroundImage: `url(${buildAssetUrl(dish.image)})`,
+                                backgroundImage: `url(${getImageUrl(dish.image)})`,
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'left center',
                                 backgroundRepeat: 'no-repeat',
@@ -64,7 +65,7 @@ export default function DishCard({ dish }) {
                             style={{
                                 width: '50%',
                                 height: '100%',
-                                backgroundImage: `url(${buildAssetUrl(dish.image)})`,
+                                backgroundImage: `url(${getImageUrl(dish.image)})`,
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'right center',
                                 backgroundRepeat: 'no-repeat',

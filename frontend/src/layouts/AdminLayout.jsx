@@ -18,7 +18,7 @@ export default function AdminLayout({ children }) {
     const { restaurant, logout } = useAuthStore();
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    const handleLogout = () => { logout(); navigate('/admin/login'); };
+    const handleLogout = async () => { await logout(); navigate('/admin/login'); };
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--color-bg)' }}>

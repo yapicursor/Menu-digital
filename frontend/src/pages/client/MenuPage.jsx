@@ -41,32 +41,32 @@ export default function MenuPage() {
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
                 borderBottom: '1px solid var(--color-border)',
-                padding: '64px 24px 48px',
-                minHeight: 'clamp(300px, 38vw, 520px)',
+                padding: 'clamp(40px, 8vw, 64px) clamp(16px, 4vw, 24px) clamp(32px, 6vw, 48px)',
+                minHeight: 'clamp(280px, 35vw, 480px)',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 textAlign: 'center',
             }}>
-                <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#f97316', fontWeight: 700, marginBottom: 12 }}>
+                <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#f97316', fontWeight: 700, marginBottom: 10 }}>
                     🍴 Bienvenue
                 </div>
-                <h1 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', lineHeight: 1.2, marginBottom: 12 }}>
+                <h1 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: 'clamp(1.6rem, 5vw, 2.8rem)', lineHeight: 1.2, marginBottom: 12 }}>
                     Notre <span className="gradient-text">Menu</span>
                 </h1>
-                <p style={{ color: 'rgba(255,255,255,0.82)', fontSize: '1rem', maxWidth: 500, margin: '0 auto' }}>
+                <p style={{ color: 'rgba(255,255,255,0.82)', fontSize: 'clamp(0.9rem, 2vw, 1rem)', maxWidth: 'min(90%, 500px)', margin: '0 auto' }}>
                     Découvrez nos plats préparés avec passion et savoir-faire
                 </p>
             </div>
 
-            <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
+            <div style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(24px, 5vw, 32px) clamp(min(4vw, 20px))' }}>
                 {/* Search bar */}
-                <div className="menu-search" style={{ position: 'relative', margin: '0 auto 28px', maxWidth: 480 }}>
+                <div className="menu-search" style={{ position: 'relative', margin: '0 auto 24px', maxWidth: 'min(90%, 480px)' }}>
                     <Search size={18} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-muted)' }} />
                     <input
                         className="input"
-                        style={{ paddingLeft: 44 }}
+                        style={{ paddingLeft: 44, fontSize: '1rem' }}
                         placeholder="Rechercher un plat..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -75,23 +75,23 @@ export default function MenuPage() {
 
                 {/* Category nav */}
                 {categories.length > 0 && (
-                    <div style={{ marginBottom: 32, display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ marginBottom: 24, display: 'flex', justifyContent: 'center' }}>
                         <CategoryNav categories={categories} selected={selectedCategory} onSelect={setSelectedCategory} />
                     </div>
                 )}
 
                 {/* Section title */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
                     <Utensils size={18} color="#f97316" />
-                    <h2 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '1.2rem' }}>
+                    <h2 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: 'clamp(1rem, 3vw, 1.2rem)', flexShrink: 0 }}>
                         {selectedCategory ? categories.find((c) => c.id === selectedCategory)?.name : 'Tous les plats'}
                     </h2>
-                    <span style={{ color: 'var(--color-muted)', fontSize: '0.875rem' }}>({filtered.length} plat{filtered.length !== 1 ? 's' : ''})</span>
+                    <span style={{ color: 'var(--color-muted)', fontSize: 'clamp(0.8rem, 2vw, 0.875rem)', whiteSpace: 'nowrap' }}>({filtered.length} plat{filtered.length !== 1 ? 's' : ''})</span>
                 </div>
 
                 {/* Skeleton */}
                 {isLoading && (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 20 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))', gap: 16 }}>
                         {[...Array(6)].map((_, i) => (
                             <div key={i} style={{ borderRadius: 16, overflow: 'hidden' }}>
                                 <div className="skeleton" style={{ height: 180 }} />
@@ -104,9 +104,9 @@ export default function MenuPage() {
                     </div>
                 )}
 
-                {/* Dishes grid */}
+                {/* Empty state */}
                 {!isLoading && filtered.length === 0 && (
-                    <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--color-muted)' }}>
+                    <div style={{ textAlign: 'center', padding: 'clamp(40px, 8vw, 60px) clamp(20px)', color: 'var(--color-muted)' }}>
                         <Utensils size={48} style={{ opacity: 0.2, marginBottom: 16 }} />
                         <p style={{ fontWeight: 500, fontSize: '1rem' }}>Aucun plat trouvé</p>
                     </div>

@@ -6,19 +6,18 @@ import { useNavigate } from 'react-router-dom';
 import ClientLayout from '../../layouts/ClientLayout';
 import useCartStore from '../../store/cartStore';
 import { orderService } from '../../services/orderService';
-import { buildAssetUrl } from '../../services/api';
 import { Minus, Plus, Trash2, User, Phone, Hash, MessageSquare, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const schema = z.object({
     customer_name: z.string().min(2, 'Nom requis (min 2 caractères)'),
-    customer_email: z.string().email('Email invalide'),
+    customer_email: z.string().email('Email invalide').optional().or(z.literal('')),
     customer_phone: z.string().min(8, 'Numéro de téléphone invalide'),
     table_number: z.string().optional(),
     comment: z.string().optional(),
 });
 
-const RESTAURANT_ID = Number(import.meta.env.VITE_RESTAURANT_ID || 1);
+const RESTAURANT_ID = import.meta.env.VITE_RESTAURANT_ID || null;
 
 export default function CartPage() {
     const { items, updateQuantity, removeItem, clearCart } = useCartStore();
@@ -72,7 +71,7 @@ export default function CartPage() {
                             {items.map((item) => (
                                 <div key={item.id} className="cart-item" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 14, padding: 16, display: 'flex', alignItems: 'center', gap: 14 }}>
                                     {item.image ? (
-                                        <img src={buildAssetUrl(item.image)} alt={item.name} className="cart-item-img" style={{ width: 52, height: 52, objectFit: 'cover', borderRadius: 10, flexShrink: 0 }} />
+                                        <img src={item.image} alt={item.name} className="cart-item-img" style={{ width: 52, height: 52, objectFit: 'cover', borderRadius: 10, flexShrink: 0 }} />
                                     ) : (
                                         <div style={{ width: 52, height: 52, borderRadius: 10, background: 'rgba(249,115,22,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '1.3rem' }}>🍽️</div>
                                     )}
@@ -111,15 +110,6 @@ export default function CartPage() {
                                 </label>
                                 <input className={`input ${errors.customer_name ? 'input-error' : ''}`} placeholder="Votre nom" {...register('customer_name')} />
                                 {errors.customer_name && <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: 4 }}>{errors.customer_name.message}</p>}
-                            </div>
-
-                            {/* Email */}
-                            <div>
-                                <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-muted)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                    <User size={13} /> Email *
-                                </label>
-                                <input className={`input ${errors.customer_email ? 'input-error' : ''}`} placeholder="ex: client@gmail.com" {...register('customer_email')} />
-                                {errors.customer_email && <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: 4 }}>{errors.customer_email.message}</p>}
                             </div>
 
                             {/* Phone */}

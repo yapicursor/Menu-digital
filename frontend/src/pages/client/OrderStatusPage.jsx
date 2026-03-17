@@ -2,7 +2,6 @@ import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { orderService } from '../../services/orderService';
 import ClientLayout from '../../layouts/ClientLayout';
-import { buildAssetUrl } from '../../services/api';
 import { StatusBadge } from '../../components/StatusBadge';
 import { CheckCircle, Clock, XCircle, ChefHat, Package } from 'lucide-react';
 
@@ -46,11 +45,9 @@ export default function OrderStatusPage() {
     const Icon = si.icon;
 
     const resolveImageUrl = (image) => {
-        const raw = typeof image === 'string' ? image.trim() : '';
-        if (!raw) return null;
-        if (raw.startsWith('http://') || raw.startsWith('https://')) return raw;
-        if (raw.startsWith('/uploads/')) return buildAssetUrl(raw);
-        return buildAssetUrl(`/uploads/${raw}`);
+        if (!image) return null;
+        if (image.startsWith('http://') || image.startsWith('https://')) return image;
+        return null;
     };
 
     return (

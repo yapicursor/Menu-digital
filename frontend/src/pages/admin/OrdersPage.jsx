@@ -3,7 +3,7 @@ import AdminLayout from '../../layouts/AdminLayout';
 import { orderService } from '../../services/orderService';
 import { StatusBadge } from '../../components/StatusBadge';
 import TrendBadge from '../../components/TrendBadge';
-import { buildAssetUrl } from '../../services/api';
+
 import { Check, X, ChevronDown, RefreshCw, Eye, Download, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { jsPDF } from 'jspdf';
@@ -284,7 +284,7 @@ function OrderDetailModal({ order, onClose }) {
         const raw = typeof image === 'string' ? image.trim() : '';
         if (!raw) return null;
         if (raw.startsWith('http://') || raw.startsWith('https://')) return raw;
-        if (raw.startsWith('/uploads/')) return buildAssetUrl(raw);
+        if (raw.startsWith('/uploads/')) return raw;
         return buildAssetUrl(`/uploads/${raw}`);
     };
 

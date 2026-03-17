@@ -1,6 +1,6 @@
 import useCartStore from '../../store/cartStore';
 import { Plus, Minus, Trash2, ShoppingCart, ArrowRight } from 'lucide-react';
-import { buildAssetUrl } from '../../services/api';
+
 import { useNavigate } from 'react-router-dom';
 
 export default function CartDrawer({ open, onClose }) {
@@ -75,7 +75,7 @@ export default function CartDrawer({ open, onClose }) {
                                                 style={{
                                                     width: '50%',
                                                     height: '100%',
-                                                    backgroundImage: `url(${buildAssetUrl(item.image)})`,
+                                                    backgroundImage: `url(${item.image})`,
                                                     backgroundSize: 'cover',
                                                     backgroundPosition: 'left center',
                                                     backgroundRepeat: 'no-repeat',
@@ -85,7 +85,7 @@ export default function CartDrawer({ open, onClose }) {
                                                 style={{
                                                     width: '50%',
                                                     height: '100%',
-                                                    backgroundImage: `url(${buildAssetUrl(item.image)})`,
+                                                    backgroundImage: `url(${item.image})`,
                                                     backgroundSize: 'cover',
                                                     backgroundPosition: 'right center',
                                                     backgroundRepeat: 'no-repeat',

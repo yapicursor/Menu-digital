@@ -1,21 +1,21 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { supabase } from '../services/supabase';
 
 const useAuthStore = create(
     persist(
         (set) => ({
-            token: null,
+            session: null,
             restaurant: null,
             isAuthenticated: false,
 
-            login: (token, restaurant) => {
-                localStorage.setItem('token', token);
-                set({ token, restaurant, isAuthenticated: true });
+            setSession: (session, restaurant) => {
+                set({ session, restaurant, isAuthenticated: !!session });
             },
 
-            logout: () => {
-                localStorage.removeItem('token');
-                set({ token: null, restaurant: null, isAuthenticated: false });
+            logout: async () => {
+                await supabase.auth.signOut();
+                set({ session: null, restaurant: null, isAuthenticated: false });
             },
 
             setRestaurant: (restaurant) => set({ restaurant }),

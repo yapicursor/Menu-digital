@@ -6,6 +6,7 @@ import MenuPage from './pages/client/MenuPage';
 import CartPage from './pages/client/CartPage';
 import OrderStatusPage from './pages/client/OrderStatusPage';
 import DishDetailPage from './pages/client/DishDetailPage';
+import OrderHistoryPage from './pages/client/OrderHistoryPage';
 
 // Pages Admin
 import LoginPage from './pages/admin/LoginPage';
@@ -27,6 +28,7 @@ function App() {
       <Route path="/commander" element={<CartPage />} />
       <Route path="/commande/:id" element={<OrderStatusPage />} />
       <Route path="/plat/:id" element={<DishDetailPage />} />
+      <Route path="/mes-commandes" element={<OrderHistoryPage />} />
 
       {/* Admin Routes */}
       <Route path="/admin/login" element={<LoginPage />} />

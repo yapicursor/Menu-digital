@@ -17,14 +17,14 @@ const schema = z.object({
 
 export default function RegisterPage() {
     const navigate = useNavigate();
-    const login = useAuthStore((s) => s.login);
+    const login = useAuthStore((s) => s.setSession);
 
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(schema) });
 
     const mutation = useMutation({
-        mutationFn: (data) => authService.register(data).then((r) => r.data),
-        onSuccess: ({ token, restaurant }) => {
-            login(token, restaurant);
+        mutationFn: (data) => authService.register(data),
+        onSuccess: ({ session, restaurant }) => {
+            login(session, restaurant);
             navigate('/admin/dashboard');
         },
     });

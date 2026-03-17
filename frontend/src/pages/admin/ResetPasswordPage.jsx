@@ -21,16 +21,11 @@ export default function ResetPasswordPage() {
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(schema) });
 
     const mutation = useMutation({
-        mutationFn: (data) => authService.resetPassword({ token, password: data.password }),
+        mutationFn: (data) => authService.resetPassword({ password: data.password }),
         onSuccess: () => setTimeout(() => navigate('/admin/login'), 2000),
     });
 
-    if (!token) return (
-        <div style={{ minHeight: '100vh', background: 'var(--color-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ color: '#ef4444', textAlign: 'center' }}>Lien invalide. <Link to="/admin/forgot-password" style={{ color: '#f97316' }}>Réessayer</Link></div>
-        </div>
-    );
-
+    // Supabase met le token dans le hash de l'URL, pas besoin de le passer manuellement
     return (
         <div style={{ minHeight: '100vh', background: 'var(--color-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
             <div style={{ width: '100%', maxWidth: 420 }}>

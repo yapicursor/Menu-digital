@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import ClientLayout from '../../layouts/ClientLayout';
 import { dishService } from '../../services/dishService';
-import { buildAssetUrl } from '../../services/api';
+
 import useCartStore from '../../store/cartStore';
 import { ArrowLeft, Plus, ShoppingCart, CheckCircle, XCircle, Tag } from 'lucide-react';
 
@@ -58,7 +58,7 @@ export default function DishDetailPage() {
                                             style={{
                                                 width: '50%',
                                                 height: '100%',
-                                                backgroundImage: `url(${buildAssetUrl(dish.image)})`,
+                                                backgroundImage: `url(${dish.image})`,
                                                 backgroundSize: 'cover',
                                                 backgroundPosition: 'left center',
                                                 backgroundRepeat: 'no-repeat',
@@ -68,7 +68,7 @@ export default function DishDetailPage() {
                                             style={{
                                                 width: '50%',
                                                 height: '100%',
-                                                backgroundImage: `url(${buildAssetUrl(dish.image)})`,
+                                                backgroundImage: `url(${dish.image})`,
                                                 backgroundSize: 'cover',
                                                 backgroundPosition: 'right center',
                                                 backgroundRepeat: 'no-repeat',
